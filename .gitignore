@@ -9,3 +9,6 @@
 **/*.log
 
 **/*.pdf
+
+# Ignore zip files, used for final versions
+**/*.zip
