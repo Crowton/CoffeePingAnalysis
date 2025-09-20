@@ -1,0 +1,102 @@
+\documentclass[english,danish,8pt]{MadsFoek}
+\usepackage[T1]{fontenc} % tilføjet 7/5 2017 af Jonas Svenstrup Hansen til \dh og \th
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage{tabularx}
+\usepackage{enumitem} % Tilføjet af Andreas til kompakte lister
+\usepackage{rotating} % Til at rotere i Kanye artiklen
+
+\usepackage{float}
+
+%%% NYT! for kaffeartiklen
+\usepackage{pgf}
+
+\newlength\myheight
+\newlength\mydepth
+\settototalheight\myheight{Xygp}
+\settodepth\mydepth{Xygp}
+\setlength\fboxsep{0pt}
+\newcommand*\inlinegraphics[1]{%
+  \settototalheight\myheight{Xygp}%
+  \settodepth\mydepth{Xygp}%
+  \raisebox{-\mydepth+1pt}{\includegraphics[height=\myheight]{#1}}%
+}
+\newcommand{\coffee}[0]{\inlinegraphics{coffee.png}}
+\newcommand{\grapes}[0]{\inlinegraphics{grapes.png}}
+\newcommand{\textcoffee}[0]{\inlinegraphics{text_coffee.png}}
+
+% \usepackage{csquotes}
+% \DeclareQuoteAlias{english}{danish}
+% \MakeOuterQuote{"}
+
+\usepackage{tabularx}
+\newcolumntype{M}{>{\centering\arraybackslash}X}
+% \usepackage[justification=center]{subcaption}
+\usepackage{subcaption}
+
+% Sæt usynlig character fra LibreOffice til mellemrum for at undgå compilerfejl
+\DeclareUnicodeCharacter{FEFF}{ }
+
+% Husk at et godt Mads Føk slogan altid står med store bogstaver.
+%\frontslogan{NU MED 5-10\% F\AE RRE JORDSTR\AA LER}
+\frontslogan{MADS FR\O K}
+
+% Hvilken forside skal der bruges:
+\frontlogo{madsfoek.png}
+
+% Hvilken udgivelse er dette:
+\thisvolume{1}
+\thisvintage{1}
+\thisday{1}
+\thismonth{jan}
+\thisyear{2000}
+
+\begin{document}
+
+
+% TODO: Kan vi ikke gøre dette i documentclassen?
+\renewcommand{\contentsname}{}
+
+
+
+% \begin{side2}
+%   \noindent\textbf{Redaktionen denne gang:}\\
+%   \begin{tabular}{@{}lll}
+% 	MIG		     	& AU	& Forfatter og strålende personlighed \\
+	
+%   \end{tabular}
+% \end{side2}
+
+
+
+% TeX macroer:
+%  \centercartoon[includegraphics options]{graphic file}{header}{toc}{text on the page (e.g. hetzes)}
+%  \appendcartoon[includegraphics options]{graphic file}{header}{toc}{text on the page (e.g. hetzes)}
+%  \cartoon[includegraphics options]{graphic file}{header}{toc}{text on the page (e.g. hetzes)}
+%  \blank{header}{toc}
+% Hvis man ikke ønsker {title}, {header} eller {toc} kan de erstattes med {*}, hvilket er
+% praktisk når man bruger \cartoon eller \opslag tagsne.
+
+
+% Orddeling af særlige genstridige ord kan laves som følger:
+%\hyphenation{ord-deling}
+\hyphenation{grib-be}
+\hyphenation{tål-modigt}
+\hyphenation{tilskuersports-delen}
+\hyphenation{ice-berg-sa-lat}
+\hyphenation{sok-ker}
+
+% Hvis Haiku ikke skal have en hel side for sig selv:
+% \appendartikel{Haiku}{Haiku}{Haiku}{haiku.tex}
+
+% Leder s3
+% \input{artikel}
+% \input{artikel_del1}
+\input{artikel_del2}
+
+% \input{kalender}
+
+
+\end{document}

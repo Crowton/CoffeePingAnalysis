@@ -1,0 +1,233 @@
+\begin{article}
+% Underrubrik inde i klammerne hvis der skal være noget. Underrubrik er kursiv
+% og enspaltet.
+% [Hvis man har en større mængde data, så skal man skrive en \madsfoek artikkel.]
+[Sidste år fulgte jeg det ældgamle udtryk: ``Hvis man har en større mængde data, så skal man skrive en Mads Føk artikkel''. Nu er der gået et år mere, og derfor er der kommet mere data, som jeg naturligvis vil samle op på.]
+% Overskrift
+{Kaffepausen: \\ {\large En dybtegående analyse}}
+% ønskes en undertitel kan det gøres som følger: \\ {\large <undertitel her>}
+% Headeren oppe i hjørnet
+{Skal du med igen i kaffestuen?}
+% Indholdsfortegnelse
+{Kaffetid \protect\coffee\ }
+% Her skrives den (automatisk) dobbeltspaltede artikel:
+
+\renewcommand{\figurename}{Figur.}
+\hyphenation{leg-end-ar-iske}
+
+% Sidste år fulgte jeg det ældgamle udtryk: "Hvis man har en større mængde data, så skal man skrive en Mads Føk artikel". Nu er der gået et år mere, og derfor er der kommet mere data, som jeg naturligvis vil samle op på.
+
+\noindent
+Denne artikel bygger ovenpå artiklen ``Kaffepausen: en Analyse'' fra Mads Føk nr 1 årgang 51. Hvis du kære læser ikke har læst denne endnu vil jeg anbefale at gå ind på ``https://www.madsfoek.dk/udgivelser'' og finde den, det er et ganske godt stykke læsestof. Her kan man endda finde andre gamle udgivelser, og måske de gemmer på et sjovt hetz eller en god artikel, som er værd at tjekke ud.
+Selvom denne artikel bygger en smule ovenpå en gammel artikel, skal jeg selvfølgelig nok gøre denne læselig uden at den gamle artikel er en forudsætning, i ægte forsker stil!
+Derfor kommer her en introduktion:
+
+På datalogi befinder der sig et magisk rum, hvor de ansatte har muligheden for at hente den skønneste livseliksir: kaffen. Af de to legendariske maskiner løber et overflødighedshorn af kaffe, cappucino, latte machiato, kakao, og andre skønne drikkevarer.
+
+Dengang jeg var yngre, og blot instruktor, sad vi tit i Regnecentralen og arbejdede, og ventede på den næste gang nogen sagde de smukke ord: ``Skal vi ikke lige tage et coffee run?''. Og så kunne man få sig en velfortjent pause, mens man traskede afsted, snakkede og fik noget mere dejlig kaffe. Men ak! Den tid kunne ikke blive ved. Man blev mere ansat, fik kontor, og pludseligt var de daglige coffee runs forsvundet, da alle man plejede at gå afsted med, også sad på hver deres kontor rundt omkring. Man gik da stadig i kaffestuen -- jeg er jo ikke psykopat -- men at tage derned alene havde ikke den samme charme. Man fik ikke sludret! Det var en mørk tid.
+
+Men ud af mørket fødes lyset: '\coffee\ ping' chatten.
+En chat, hvor man kan sende en \coffee\ emoji, og gennem dette batsignal, fortælle at det er tid til et coffee run. Alle, der gerne ville med, kan så sende en \coffee\ som respons, og på den måde ved man hvem man skal vente på, så man kan nå at møde alle, som skulle med på coffee runnet. Et skønt koncept, der fjernede mørket, og kun lod den mørke kaffe blive tilbage.
+
+Men efter en rum tid, så bliver det jo til nogle pings. Og med mange pings kommer der meget data, som man kan analysere på. For hvornår går folk i kaffestuen? Hvor mange er man afsted af gangen?
+
+Citation på introduktionen: Mads Føk nr. 1 årgang 51 artikel ``Kaffepausen: en Analyse''.
+Du troede nok jeg ville hoppe i plagietfælden hva? Nej nej, der er skam kildehenvisning på!
+
+
+\subsection*{Metadiskussion af dataen}
+
+I sidste nummer gennemgik jeg i dybe detajler, hvordan man henter dataen fra Facebook som en JSON fil. Feedbacken var at det var utroligt kedeligt at læse, så det vil jeg spare dig for i denne omgang. Processen er alligevel meget den samme, dog har nogle overskifter ændret sig, da intet i denne verden er statisk. Det var dog nok til, at jeg selv kunne bruge den som guide til at finde dataen i år.
+
+Sidste gang fik man en fin zip fil udleveret af Facebook, som indeholdt alt ens dejlige data.
+Da jeg skulle være sikker på ikke at miste noget, hentede jeg denne gang data for begge år. Man kan dog ikke få fat i 2 års data blot fra \coffee\ ping chatten, så jeg har derfor hentet alle mine beskeder fra de sidste 3 år.
+Det fylder noget mere, end hvad Facebook vil ligge i én zip fil, og derfor var der denne gang hele 6 zip filer!
+Det skulle jo være nemt nok, tænker du ikke? Så ligger der ca. 1/6 af mine samtaler i hver mappe, og så skal man bare finde den mappe som \coffee\ ping chatten ligger i?
+Næ nej, det ville jo være smart! I stedet for at lave denne vertikale deling af dataen, har Facebook istedet opdelt dataen horisontalt, altså er der lidt af alle chats i alle zip filer. Godt man har Windows stifinder, som kan finde ud af at flette mapperne, efter de er blevet unzippet.
+Her kan man også konkludere, at Facebook gerne vil være sikker på at ens ting kommer med, for der er duplikater af billeder i forskellige mapper. Og mange af dem! Tsk tsk.
+Men heldigvis er det kun hele filer, der er delt, og ikke de JSON filer som indeholder ens chats. Så dataen, vi er interesseret i, skal vi ikke til at flette sammen. Heldigt.
+
+I denne JSON fil er noget metadata for chatten samt en lang liste ``messages'', som indeholder alle beskederne i chatten. Hver af disse indeholder ``sender\_name'' (navnet på hvem der har sendt beskeden) og ``timestamp\_ms'' (unix time i millisekunder). Sidst blev det diskuteret, hvorfor unix time er absolut overlegen over almindeligt datoformat, og denne holdning holder jeg fast i, givet den er 100\% sand.
+Og bare rolig, bare fordi almindeligt datoformat er skrald for computere, har jeg naturligvis stadig taget højde for sommer- og vintertid i oversættelsen til det almindelige datoformat. Eller, det har det indbyggede \texttt{datetime} biblotek i Python taget højde for.
+Tekstbeskeder indeholder yderligere ``content'', som er indeholdet af, hvad der er blevet sendt. Det er her, kære læser, at vores kaffe pings gemmer sig. Ja, man skulle jo nok tro, at alt der var i \coffee\ ping chatten, er \coffee\ pings, men her tager man fejl, da det også indeholder en utrolig masse spam. Vi skal derfor filtrere i beskederne, for at få fat i de faktiske \coffee\ pings.
+
+Emojis er enkodet i UTF-8, som er et format der understøtter (næsten) alle tegn i verden, herunder også emojis. I JSON filen er UTF-8 karakterer enkodet med '\textbackslash u00YY', hvor 'YY' er hex enkodningen af den byte der ligger underliggende. Her kan man kimse lidt af Facebook, da man kun bruger de nederste to værdier, og derved kunne enkode det samme med '\textbackslash xYY'.
+Dog kan vi nu fint genkende UTF-8 karakterer. Her sætter man flere af disse sammen i træk, da UTF-8 er variablet enkodet, for at lave en emoji. Her ved vi, at den enkodning vi leder efter, er
+\begin{center}
+	\textbackslash u00e2\textbackslash u0098\textbackslash u0095: \coffee \; .
+\end{center}
+Dog ses det, at mange beskeder, som ligner \coffee\ pings, yderligere har tilføjet '\textbackslash u00ef\textbackslash u00b8\textbackslash u008f' bag på denne enkodning. Ved at slå op i sin UTF-8 decoder, kan man dog ikke se nogen forskel på '\textbackslash u00e2\textbackslash u0098\textbackslash u0095' og '\textbackslash u00e2\textbackslash u0098\textbackslash u0095\textbackslash u00ef\textbackslash u00b8\textbackslash u008f'. I sidste artikel blev der gættet på, at denne ekstra del var en særlig BOM (Byte Order Mask) enkodning, som Facebook tilføjede.
+Under analysen i denne omgang tjekkede jeg i mit script, hvor mange af beskederne der indeholdte den ekstra enkodning, uden at være direkte et ping. Der var en del flere end forventet.
+Nogle af disse er tekst, der indeholder \coffee\ emojien, som korrekt ikke er pings, og derfor skal filtreres fra. Dog er nogle af dem en besked, som præcist er et \coffee\ ping, men som altså ikke tidligere er blevet talt med! Dataen har ikke været fyldestgørende i sidste artikel! Skrækkeligt! Jeg dykkede derfor naturligvis nærmere ned i sagen.
+
+Mit første gæt var, at Facebook enkoder chatemojien og almindelige emojis forskelligt. Dette kunne godt passe fint, da de chats som indeholder anden tekst og en \coffee\ emoji, er uden den ekstra enkodning. De ekstra \coffee\ pings er derfor nok nogen, som har pinget ved at sende en besked med \coffee\ emojien, og ikke gennem chatemoji knappen.
+Dette kunne yderligere passe med, at Facebook har forskellige størrelser af chatemojien.
+Derfor blev naturligvis sat en meget videnskabelig test op: jeg spammede mig selv med emojis, for at se, om der var nogen forskel. Hertil brugte jeg \grapes\ emojien, da den var den første emoji, der kom op. Det var meget videnskabelig process, hvor hver emoji blev nøje dokumenteret med en yderligere besked om hvad test den dækkede. Der blev sendt emojien alene, sammen med tekst, og i alle tre størrelser af chatemojien. Og eksperiementet blev gentaget både på computeren og telefonen. Konklusionen? Emojien er enkodet ens i alle instanser. Pokkers.
+En mulig fejl kan være at den brugte emoji har en anden enkodning 
+\begin{center}
+	\textbackslash u00F0\textbackslash u009F\textbackslash u008D\textbackslash u0087: \grapes
+\end{center}
+Som den kvikke læser kan se, så er det vigtige her at den en anden længde enkodning (jeg sagde UTF-8 var variabelt enkodet, right?), som muligvis kan gøre at Facebook ikke tilføjer denne ekstra hale af enkodning bag på.
+Jeg gjorde derfor det eneste naturlige (og hvad man nok skulle have gjort fra starten af): gentog eksperiementet, men ved brug af \coffee\ emojien.
+For dette eksperiment så man heller ingen forskel i enkodningen. Og hvad værre er, chatemojien havde heller ingen ekstra enkodning, så det matcher slet ikke hvad \coffee\ ping chatten gør!
+Det var derfor tid til at tage mere drasktiske midler i brug: den sidste variable at skrue på i eksperimentet er at ikke skrive til sig selv, men en gruppe. Jeg var derfor tvunget til at spamme mine stakkels kammerater. Bare rolig, jeg brugte en ny chat - man skal jo ikke plette dataen i \coffee\ ping chatten til næste gang!
+Dette eksperiment havde endeligt en konklusion: at jeg burde have haft en bedre hypotese, for det virkede heller ikke. Og igen ingen ekstra enkodning på noget.
+
+Jeg må indrømme at jeg her var meget forvirret, for hvor kommer den mystiske ekstra enkodning så fra i \coffee\ ping chatten, og hvad betyder den?
+Her viser det sig at den bedste løsning på alle problemer er at få andre til at løse dem for sig. Ved at Google '\textbackslash u00ef\textbackslash u00b8\textbackslash u008f' kommer intet relevant op, som forklarer hvad de betyder. Men her må vi huske på at Facebook er wack, og man jo bør bruge '\textbackslash xYY' formatet. Og ved at søge på '\textbackslash xef\textbackslash xb8\textbackslash x8f' kommer derendeligt noget brugbart op: en tysk hjemmeside\footnote{https://www.utf8-chartable.de/unicode-utf8-table.pl?start=65024\&utf8=string-literal} med alle tabeller over UTF-8 enkodninger samt hvad de forskellige dele betyder. Og her kan vi endeligt se hvad den ekstra enkodning betyder:
+\begin{center}
+	\textbackslash u00ef\textbackslash u00b8\textbackslash u008f: VARIATION SELECTOR-16
+\end{center}
+Eh, okay. Betyder det varianter som i hvilken hudfarve og retning ens emoji har? Har vores kære \coffee\ ping hele tiden været rødhåret? Desværre ikke. Variation Selectors er mere sprogbaseret, som vi også kan se på Wikipedia artiklen\footnote{https://en.wikipedia.org/wiki/Variation\_Selectors\_(Unicode\_block)} derom. Her ses det, at det blandt andet bruges til kompatibilitet med eksempelvis sjældne Kinesiske tegn, som blev indgivet til Unicode i år 1992-1998, Myanmarske tegn, og Egyptiske hieroglyffer. Og hertil har de moderne hieroglyffer, nemlig emojis, også en varians selector. VARIATION SELECTOR-16 betyder at emojien skal fremvises som *trommehvirvel tak* en emoji.
+Har Facebook brugt 3 UTF-8 karakterer på alle vores \coffee\ \emph{emoji} pings, på at sige de skal vises som \emph{emojis}. Damn.
+Nårh, mysterie løst.
+
+Men hvorfor er der så nogle emojis, som er sendt uden denne ekstra enkodning?
+Første indskydelse kunne være at Facebook først ikke havde denne ekstra enkodning med, og på et tidspunkt skiftede det, men ved at observere dataen kan man se at alle \coffee\ pings uden den ekstra enkodning er pænt fordelt over året.
+For at kunne finde frem til den korrekt årsag til at kunne diskutere dette, skal vi først kigge på fejlkilderne i den analyse som kommer senere. Her er der 4 hoved fejlkilde kategorier, jeg har delt fejlene i \coffee\ ping dataen op i:
+\begin{enumerate}[noitemsep]
+	\item Variende tid fra man ping'er til man faktisk er i kaffestuen.
+	\item Folk der går i kaffestuen uden at pinge.
+	\item Folk der ping'er uden at gå i kaffestuen.
+	\item Steffan.
+\end{enumerate}
+De første tre er meget naturlige at se hvorfor nødvendigvis er tilstede. Den sidste er simpelthen blot fordi jeg så mange gange har sagt til Steffan, at han er en fejlkilde, når vi har mødtes i kaffestuen, at det simpelthen må være sandt. Skal jeg være ærlig, så husker jeg ikke hvorfor han er en fejlkilde for hver gang, og noget af det skal nok passe ind med de første tre punkter, men min mavefornemmelse siger mig, at der er flere fejlkilder han bidrager med, og derfor skal han naturligvis nævnes. Det her er jo videnskab, og derfor skal man liste sådanne ting.
+
+Vi kan nu vende tilbage til hvorfor nogle \coffee\ pings er sendt uden den ekstra emoji. Og her kan vi takke min mavefornemmelse, da den har helt ret.
+I oktober 2016 udgav Facebook en version af Messenger som hed 'Messenger Lite', som er en meget basal udgave af Messenger. Fordelen ved denne app er at den ikke kræver den samme mængde af processorkraft at køre, og at man kan skrue meget ned for, hvor spændende den er at se på. Og dette er noget der tiltalte Steffan, da han er en af de fornuftige af os, som ikke gider at spilde tid på sin telefon mere end nødvendigt. Men han er dog fornuftig nok til stadig at være med i \coffee\ ping chatten. Messenger Lite har dog en begrænsning for meget: den tillader ikke at sende anden chatemoji end Facebook's egen Thumbs Up. Derfor måtte Steffan sende \coffee\ pings ved at sende en chat besked indeholdende \coffee\ emojien, som derved er blevet enkodet anderledes. Han har dog fra sin computer kunne \coffee\ ping almindeligt.
+Messenger Lite blev for et års tid siden blevet udfaset, og Steffan er gået over til den almindelige Messenger app, og pinger derfor nu normalt igen.
+
+Disse anderledes pings har ledt til at 151 pings fra sidste år er gået tabt i analysen, som nu er kommet med. Da der dog sidste år var 2596 uden disse, samt at de var pænt fordelt over året (se afsnit Dataanalysen nedenfor), er det fint indenfor en acceptabel fejlmargen.
+
+For blot lige at vende tilbage til hvad de der variation selectors så kan gøre ved emojis, så er der, som du kære læser nok kan regne ud, 16 Variation Selectors. Selector 1-14 gør intet for emojis, mens VARIATION SELECTOR-15 betyder at emojien skal vises som tekst. Og det er ret cursed. Eksempelvis kan man se vores ærede og smukke \coffee\ ping emoji med VARIATION SELECTOR-15 nedenfor.
+\begin{center}
+	\textbackslash u00e2\textbackslash u0098\textbackslash u0095\textbackslash u00ef\textbackslash u00b8\textbackslash u008e: \textcoffee
+\end{center}
+Steffan er naturligvis begyndt at pinge med denne emoji. Mere arbejde til mig. Tak Steffan.
+
+
+\subsection*{Dataanalysen}
+
+\coffee\ ping chatten blev født d. 19 september 2022, og den gamle dataperiode løb fra denne til og med 18. september 2023, dvs. præcist et år. Lad derfor den nye dataperiode dække de samme datoer, men skudt et år frem.
+Her vil jeg bruge noget tid på at diskutere denne nye data på samme måde som i sidste artikel, så vi senere har muligheden for at sammenligne de to.
+%Blot at kigge på denne data giver ikke meget, da konklusionerne er meget de samme; nogle folk er udskiftet i chatten men i det store hele gør dette ikke den store forskel. Jeg vil derfor ikke gå enormt i dybten med dataen for det nye år, men vigtigere vil jeg sammenligne dataen fra de to år, samt den totale to års data periode.
+
+Her kan man prise sig lykkelig for at man, hvis jeg altså selv skal sige det, er en ret så god programmør, så man kan blot starte sit script op fra sidste år på denne nye data, og se den spytte alle de samme plots ud. Ja altså, det gælder kun hvis den ikke i stedet spyttede en IndexError i en af sine arrays ud. Mystisk. Lige indtil man overvejer at 2024 er et skudår, som derfor har en dag mere i februar, som man altså ellers havde hardcoded til at have 28 dage. Ups.
+Men efter at fikse denne lille bitte fejl\footnote{Altså i scriptet, jeg kan desværre ikke fikse kalenderen. Skud ud efter skuddage, og skud ud til unix time for ikke have sådanne fejl.\vspace{2em}}, kan man pænt køre sit script og få nogle dejlige plots ud.
+
+Lad os først få det vigtigste spørgsmål ud af verden: hvor mange \coffee\ pings har der så været det sidste år? 2916. Det er i gennemsnit ca. 7,97 \coffee\ pings om dagen. Sammenlignet med året før, hvor der efter korrigeringen er 2751 \coffee\ pings samlet\footnote{Ja, hvis du ligger de tidligere 2596 \coffee\ pings sammen med Steffans manglende 151 \coffee\ pings, mangler der stadig 4 \coffee\ pings for at ramme dette tal. Disse skyldes 1 andet \coffee\ ping fra sidste år som var sendt uden den ekstra enkodning, og 3 yderligere \coffee\ pings, som er fra eftermiddagen dataen blev hentet, som derved blev overset.}, og derved i gennemsnit ca. 7,54 \coffee\ pings om dagen, kan man se at vi er gået en smule op i antal pings. Dog ikke mere end ca. 6\%, så ikke noget jeg vil korrigere yderligere for i sammenligningen af dataen.
+For overskuelighedens skyld er her de samme tal, men i en tabel, inklusiv en række for de samlede to år.
+\begin{center}
+	\begin{tabular}{l|c|c}
+		Periode & \coffee\ pings & \coffee\ \!/dag \\ \hline
+		2022 - 2023 & 2751 & 7,54 \\
+		2023 - 2024 & 2916 & 7,97 \\ \hline
+		2022 - 2024 & 5667 & 7,75
+	\end{tabular}
+\end{center}
+Med 5667 \coffee\ pings på to år kan man nok roligt sige at \coffee\ ping chatten til tider føles som spam. Og her skal man naturligvis ikke glemme de ekstra beskeder, som også gemmer sig i \coffee\ ping chatten.
+
+Sådanne enkelte tal er i sig selv ikke interasant. Det interasante er hvornår og med hvem folk går i kaffestuen.
+Her har jeg valgt at opsumere de \coffee\ pings, der er kommet ind over det sidste år, i de samme fire opdelinger som sidste gang.
+På Figur~\ref{fig:weekday_analysis_2023-2024} kan man se foredelingen over ugedage. Som forventet er der klart flest pings på hverdage, da det trods alt er her arbejdsdagene ligger. Dog kan man ikke helt neglisere, at der er pings i weekenden, som jeg personligt vil skylde skylden på deadlines, eksamensperioder og andre tossede events der bringer én på universitetet på en højhellig weekend.
+Man kan måske også på denne figur ane at vi tager lidt tidligere fri om fredagen for at tage enten a) hjem, eller b) et smut forbi Fredagscaféen\footnote{For de uinviede er det navnet som 'DatBar' faktisk har på papiret. Hvad kan man sige, domænet fra frit, og det var en god joke.}, når de åbner kl 15.
+Det er selvfølgelig også en mulighed at vi et totalt 360 no scope blaze it lit MLG's, og derfor bare har målrettet sigtet efter 420 \coffee\ pings i alt.
+
+\begin{figure}[H]
+	\centering
+	\resizebox{\columnwidth}{!}{\input{plot_weekday_analysis_2023-2024.pgf}}
+	\vspace{-20pt}
+	\caption{\protect\coffee\ pings fordelt på ugedag i 2023-2024 perioden.}
+	\label{fig:weekday_analysis_2023-2024}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\resizebox{\columnwidth}{!}{\input{plot_weekday_analysis_hour_2023-2024.pgf}}
+	\vspace{-20pt}
+	\caption{\protect\coffee\ pings fordelt på klokkeslet og ugedag i 2023-2024 perioden.}
+	\label{fig:weekday_analysis_hour_2023-2024}
+\end{figure}
+
+Tager man et nærmere kig ind, kan man på Figur~\ref{fig:weekday_analysis_hour_2023-2024} se på ugedagene hvornår på timen de enkelte \coffee\ pings er fordelt.
+Her kan teorien om at de færre pings stammer fra at Fredagscaféen åbner kl 15 ses, da \coffee\ pings stilner hurtigere af om fredagen end på de andre dage. Man kan også se hvornår vi møder ind og spiser frokost, da dette giver de karaktariskte to lange søjler svarende til morgenkaffen, samt det klassiske \coffee\ run som altid forekommer efter frokost. Disse er naturligvis ikke tilstede i weekenden, da, hvis man dukker op på uni i weekenden, ikke følger nogen klassisk pause struktur.
+Dog kan man se på fredags indgangen, at de færre ping på ugedagen ikke alene skyldes at vi tager tidligere fri, da der er et observerbart dyk i højden af de to klassiske morgen og frokost søjler. Skal jeg være ærlig, så aner jeg ikke hvorfor den skulle være mindre om fredagen før vi smutter fra kontorerne og videre.
+
+Men alt det her giver jo kun et billede af hvordan en uge ser ud, hvad så med ugerne hen over året? Det plot har jeg desværre ikke til dig kære læser, da jeg først tænkte på at lave et sådan plot mens jeg er ved at skrive denne sætning du ser foran dig nu. I stedet kan jeg byde på Figur~\ref{fig:month_analysis_2023-2024}, som viser \coffee\ pings fordelt på årets måneder. Her kunne man forvente at de måneder der overlapper med semesteret er højest, men her skal man huske at en nogle af \coffee\ ping chattens medlemmer er Ph.D studerende, som derved gennem deres ansættelse på universitet ikke på samme måde har semestre. Dette kan da også ses på figuren, hvor det ses at søjlerne for januar og juni er godt høje. Dog skal det tilføjes at disse måneder er eksamensperioder som for de studerende i chatten skaber et godt press på \coffee\ knappen.
+
+\begin{figure}[H]
+	\centering
+	\resizebox{\columnwidth}{!}{\input{plot_month_analysis_2023-2024.pgf}}
+	\vspace{-20pt}
+	\caption{\protect\coffee\ pings fordelt på måned i 2023-2024 perioden.}
+	\label{fig:month_analysis_2023-2024}
+\end{figure}
+
+Det mest underlige ved det her plot er at der tilsyneladende er færre \coffee\ pings i efteråret end foråret. Jeg, ligesom nok også du kære læser, aner ikke hvorfor dette er tilfældet.
+
+Hvis vi zoomer en enkelt gang mere ind, og kigger på \coffee\ pings fordelt på hver dag i løbet af året, kan vi måske finde et mønster som afslører hvorfor der skulle være flere pings i foråret end efteråret. Dette plot kan ses i Figur~\ref{fig:year_analysis_2023-2024}. Det første man nok ligger mærke til er at dette plot har en masse regulere spikes, men dette skyldes blot at weekend eksister ganske regulært.
+Dog er disse sværre at tyde i eksamensperioderne, hvor dagene trods alt glider lidt sammen og weekend bliver et mere mudret koncept. Lad os være ærlige: hvad er lørdag andet end en ekstra dag at læse op i, før eksamen rammer.
+Desværre er der ikke ligefrem noget som viser hvorfor vi skulle have \coffee\ pinget mindre i efteråret. Senere i denne artikel vil jeg komme ind på en hypotese, som måske kan forklare dette, så stay tuned! I mellemtiden er der andre sjove ting der skal kommenteres på på plottet.
+For det første kan man nogenlunde se hvor påskeferien og efterårsferien ligger, da der er dyk i slut marts og midt oktober hvor disse ligger. Man kan også se at vi har været bedre til at holde fri i påskeferien end i efterårsferien. Ups.
+For sommerferien er kun en enkelt uge med meget få \coffee\ pings, som kunne tolkes som at vi ikke har holdt meget ferie. Det skal dog siges at juli og august generelt har lavere \coffee\ pings end resten af semester månederne, som derfor nok nærmere peger på at vi har holdt ferie meget forskudt, med undtagelse af denne ene uge i juli, hvor mange af os har været væk.
+Derudover kan man heldigvis se at mængden af \coffee\ pings er lav omkring juletid, som det bør være sig.
+
+\begin{figure*}[t!]
+	\centering
+	\resizebox{2\columnwidth}{!}{\input{plot_year_analysis_2023-2024.pgf}}
+	\vspace{-15pt}
+	\caption{\protect\coffee\ pings fordelt på årets dag og måned i 2023-2024 perioden.}
+	\label{fig:year_analysis_2023-2024}
+\end{figure*}
+
+Sidste år kiggede jeg på de dage der var 20 eller flere \coffee\ pings på en enkelt dag, for at se om man kan spotte nogle events eller tendenser på disse dage, som har ledt til de mange \coffee\ pings. Jeg kunne for perioden 2022-2023 ikke se nogle grunde til at der skulle være ekstra mange pings på disse dage.
+Jeg har tilsvarende i år kigget på disse spikes. Sidste år var der listet 6 dage med 20 eller flere \coffee\ pings\footnote{Korrigeres senere i denne artikel, grundet de manglende ping.}, mens der i år er hele 20 dage. Jeg har været på jagt i min kalender for at finde en årsag til at disse dage har mange pings og jeg har fundet nul årsager. Det lader til at på random dage falder det bare sammen at flere folk er på universitet, og derfor bliver der drukket mere kaffe. Jeg vil ikke fylde en masse plads med at liste disse mange dage, men vil blot kommentere på, at alle dage med 20 eller flere \coffee\ pings for 2023-2024 perioden ligger mellem januar og august.
+
+Der var dog to sjove sammenfald med disse mange \coffee\ pings datoer. Den første er d. 5. januar, hvor jeg kan se i mit fotogalleri at vi har været på et \coffee\ run, hvor hele 10 mennesker var med samlet! Og på det fælles selfie vi har taget sammen ser vi rigtigt glade ud! Arh, en skøn dag med et dejligt stort \coffee\ run. Jeg kan dog, kære læser, desværre ikke vise billedet her, fordi, så skal man have tillade fra dem alle og GDPR og gøgl. Så, bare forestil dig et stjernegodt billede af nogle glade mennesker i kaffestuen.
+
+Den anden sjove ting der skete på en mange \coffee\ ping dag var d. 27. og 28. februar. Det var på disse skøne dage at vi for alvor begyndte at gøgle med at Facebook messenger chats har en funktion til at give kaldenavne til medlemmerne i chatten. Her satte vi en persons kaldenavn til '\coffee\ \!' d. 27. februar, hvilket jo er meget sjovt. Det gør nemlig at når denne person pinger, så ser ens notifikation sådan her ud
+\begin{center}
+	\coffee\ : \coffee\
+\end{center}
+
+\noindent
+Det kunne man dog godt gøre bedre, da vi d. 28. februar opdaterede kaldenavnet til endnu flere emojis, så en notifikation nu ser sådan her ud
+
+% \begin{center}
+% 	\coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\
+% \end{center}
+\[ \text{\coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\ : \coffee\ } \]
+
+\vspace{4pt}
+\noindent
+Her er navnet de første seks \coffee\ emojis, samt de kolon der er imellem, mens det sidste kolon er Facebook styling, og det sidste \coffee\ er det faktiske ping. Genialt. Absolut komisk. På ingen måde forvirrende.
+Det blev det dog da vi skiftede navnet på en person til 'You', så når de pingede lignede det på computeren at man selv lige havde pinget, hvilket har ledt til at jeg mere end en gang selv har troet jeg havde pinget og glemt at gå i kaffestuen. For kompatibilitet er der naturligvis en person med kaldenavnet 'Dig', for de som har messenger på dansk. \\
+
+\noindent
+Som der blev nævnt tidligere, har Facebook en ikke ensformig enkodning af \coffee\ emojien, og dette har ledt til at der sidste år er 152 pings der er gået tabt, hvoraf 151 af disse skyldes Steffan. Her kan man på Figur~\ref{fig:month_analysis_2022-2023_steffan_missing} se et plot over hvor mange af disse manglende \coffee\ pings fra Steffan der lå hver måned, som også bekræftiger at enkodningen ikke blot skiftede fra dag til dag, men nærmere fra device til device.
+Efter at tælle disse ekstra pings med ændrer sidste års plots sig ikke meget. Den største forskel er at der kommer 4 flere dage hvor der er 20 eller flere \coffee\ pings. Jeg har for disse 4 nye dage ikke kunne finde nogen forklaring på hvorfor der var mange \coffee\ pings.
+
+\begin{figure}[H]
+	\centering
+	\resizebox{\columnwidth}{!}{\input{plot_month_analysis_2022-2023_steffan_missing.pgf}}
+	\vspace{-20pt}
+	\caption{Manglende \protect\coffee\ pings fordelt på måned i 2023-2024 perioden fra Steffan.}
+	\label{fig:month_analysis_2022-2023_steffan_missing}
+\end{figure}
+
+
+\subsection*{Konklusion}
+
+Så nu har vi kigget på hvordan dette års \coffee\ data ser ud. Men mere spændende, når man har data fra to år, er at sammenligne de to.
+Jeg får dog hvisket i min øresnegl, at \madsfoek\ har indført en sidebegrænsning\footnote{Det kan umuligt være på grund af mig.}, så jeg må sende dig kære læser videre til alle de andre artikler og hetz for denne omgang.
+Jeg skal dog have en konklusion, fordi det hedder det her afsnit nu engang. Men da dette er en meget videnskabelig artikel, og den mangler halvdelen endnu, så ville det være meget uetisk at konkludere på halve data. 
+Så bare rolig! Du kan se frem til næste udgave, hvor jeg vil vende stærkt tilbage igen med del 2.
+Som et lille sneak peak, så kan jeg afsløre, at jeg vil lave en ny og forbedret gruppeanalyse, samt noget der næsten kunne ligne rigtig statestik, for at finde frem til variansen for de gennemsnitlige pings per dag.
+I mellemtiden mens du venter kære læser, så ved du hvor du kan finde mig. \coffee\
+
+% STOP! Skriv ikke mere efter \end{article} :)
+\end{article}
+
+\begin{flushright}
+% Forfatterens navn skrives her.
+Casper Rysgaard
+\end{flushright}

@@ -1,0 +1,3 @@
+\babel@toc {danish}{}
+\contentsline {section}{Den har forsiden på bagsiden}{1}%
+\contentsline {section}{Kaffetid \coffee \ }{2}%
