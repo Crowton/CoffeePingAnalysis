@@ -4,7 +4,7 @@
 # Ignore build files, such as plots and LaTeX out files
 **/*.pgf
 **/*.aux
-**/*.fbd_latexmk
+**/*.fdb_latexmk
 **/*.fls
 **/*.log
 
