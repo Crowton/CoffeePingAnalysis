@@ -1,0 +1,181 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{pgf}
+
+\usepackage{graphicx,calc}
+\newlength\myheight
+\newlength\mydepth
+\settototalheight\myheight{Xygp}
+\settodepth\mydepth{Xygp}
+\setlength\fboxsep{0pt}
+\newcommand*\inlinegraphics[1]{%
+  \settototalheight\myheight{Xygp}%
+  \settodepth\mydepth{Xygp}%
+  \raisebox{-\mydepth}{\includegraphics[height=\myheight]{#1}}%
+}
+\newcommand{\coffee}[0]{\inlinegraphics{coffee.png}}
+
+\usepackage{csquotes}
+\DeclareQuoteAlias{english}{danish}
+\MakeOuterQuote{"}
+
+\renewcommand{\figurename}{Figur.}
+
+
+\title{Kaffepausen: en analyse}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+I har nok alle hørt det ældgamle udtryk: "Hvis man har en større mængde data, så skal man skrive en Mads Føk artikkel", og det er præcis hvad jeg har tænkt mig at følge.
+
+På datalogi befinder der sig et magisk rum, hvor de ansatte har muligheden for at hente den skønneste livseliksir: kaffen. Af de to legendariske maskiner løber et overflødighedshorn af kaffe, cappucino, latte machiato, kakao, og andre skønne drikkevarer.
+
+Dengang jeg var yngre, og blot instruktor, sad vi tit i Regnecentralen og arbejdede, og ventede på den næste gang nogle sagde de smukkeste ord. "Skal vi ikke lige tage et coffee run?". Og så kunne man få sig en velfortjent pause, mens man traskede afsted, snakkede og fik noget mere dejlig kaffe. Men ak! Den tid kunne ikke blive ved. Man blev mere ansat, fik kontor, og pludseligt var de daglige coffee runs forsvundet, da alle man plegede at gå afsted med, tilsvarende sad på hver deres kontor rundt omkring. Man gik da stadig i kaffestuen, jeg er jo ikke psykopat, men at tage derned alene havde ikke den samme charme. Man fik ikke sludret! Det var en mørk tid.
+
+Men ud af mørket fødes lyset: '\coffee\ ping' chatten.
+En chat, hvor man kan sende en \coffee\ emoji, og gennem dette batsignal, fortælle at det er tid til et coffee run. Alle der gerne ville med kan så sende en \coffee\ som respons, og på den måde ved man hvem man skal vente på, så man kan nå at møde alle, som skulle med på coffee runnet. Et skønt koncept, der fjernede mørket, og kun lod den mørke kaffe blive tilbage.
+
+Men efter en rum tid, så bliver det jo til nogle pings. Og med mange pings kommer der meget data, som man kan analysere på. For hvornår går folk så i kaffestuen? Og hvor mange er man afsted af gangen?
+
+
+\section*{Indsamling af dataen}
+
+Er du ikke fan af at vide hvor din data kommer fra? Vil du gerne leve i uvisheden, og lade som om den bliver slagtet på en en meget human måde, før den kommer til dig i en fin indpakket plastik boks? Så skip frem til næste afsnit.
+
+Okay, du er her stadig? Full disclaimer: det her afsnit er ikke der de gode jokes er. Det er interasant, det ikke det, men det er mindre sjovt. Så. Nu er du advaret!
+
+Man står nu med denne samtale, i Facebook Messenger og har to muligheder. Enten sætter man sig ned manuelt og indtaster tidspunkterne hvert \coffee\ er kommet ind på, eller så konkluderer man, at man nu altså er datalog, og derfor bør kunne få ens computer til dette. Man kan her tage den lange vej ned af Selenium stien\footnote{Selenium er et biblotek, som kan bruges med eks Python, til at få et program til at navigere i et UI.}, eller man kan prise sig lykkelig for at der endeligt er noget GDPR kan bruges til. For det er sådan at man nu har ret til sine egne data! Og derfor kan man naturligvis også downloade denne direkte fra Facebook.
+
+Ved at gå ind på facebook.com (og naturligvis logge ind, duh), kan man klikke på sit lille fine billede i øverste højre hjørne $\rightarrow$ "Indstillinger og privatindstillinger" $\rightarrow$ "Indstillinger" $\rightarrow$ "Download profiloplysninger" $\rightarrow$ "Anmod om download" $\rightarrow$ vælg den ønskede profil og klik "Næste" $\rightarrow$ "Vælg oplysningstype" (man behøver jo ikke det hele i dette tilfælde, kun '\coffee\ ping' chatten!) $\rightarrow$ tjek "Beskeder" af og klik "Næste" $\rightarrow$ her kan du nu vælge hvor længe du vil gå tilbage i tiden (jeg valgte et år tilbage), hvad format du vil have (hvis du ikke vælger JSON, så er du altså kuk), og billed kvalitet (jeg skulle ikke bruge billederne, så jeg satte den til den laveste kvalitet). Du er nu klar til at klikke "Indsend anmodning". Efter et par timer får man en notifikation om at ens download link er klar, og vil være tilgængeligt i ca 4 dage. Så kan man hente sin data ned som en meget velorganiseret zip fil. Bemærk at man ikke kan specificere hvilke samtaler man vil have, så man får altså dem alle.
+
+Og meget kan man sige om Facebook, men hold da op hvor er deres downloadede data velorganiseret! Man bliver mødt af en zip fil, som har en mappestruktur der ville gøre enhver til skamme over hvordan man opbevarer sine egne ting. Det er fra start tydeligt at denne struktur har muligheden for at indeholde mere end bare beskeder, da man skal ind igennem en mappe, hvor det eneste element er en mappe af navnet "messages", og her, uha kære læser, jeg tør næsten ikke fortælle hvor smukt det er!
+Der er nogle mapper til at indeholde stickers og billeder der er delt mellem beskedtråde, for på den måde at spare plads. Der er ens hemmelige beskeders meta, om hvilke devices der har adgang. Der er ens spamfilter og blokerede beskeder. Og så er der en uskyldig lille mappe der hedder "inbox", og her skal vi ind.
+
+For inde i "inbox" ligger alle ens beskedtråde. En i hver mappe. Mapperne er navngivet først med det menneskenavn man har opkald tråden med, efterfulgt af den interne id som Facebook har givet tråden. Hver tråd er så yderligere opdelt med mapperne "files", "gifs", "photos" og "videos", som indeholder præcis det de beskriver. Der er også en JSON fil, simpelt døbt "message\_1.json". Denne tager vi lige et nærmere kik på.
+
+Filen indeholder et JSON objekt, med nogle meta felter, indeholdende medlemmerne af gruppen, gruppens navn og billede, om man stadig selv er med i gruppen, og så det størte felt er feltet "messages", som er en liste bestående af alle beskederne, der er i tråden. Hver besked er så i sig selv et object, som altid indeholder felterne "sender\_name" (navnet på hvem der har sendt beskeden) og "timestamp\_ms" (unix time i millisekunder). Basseret på hvilken type besked det er, er der så forskellige andre felter. For tekst beskeder er der feltet "content"\footnote{Beskeden om at nogen er blevet tilføjet til gruppen er yderligere i dette felt.}, som indeholder en streng af det der er sendt. For billeder er der feltet "photos" (eller "gifs", "videos", "files" for de tilsvarende andre typer), som er en liste af photo objecter, med en uri til hvilket billede fra den downloadede mappe der er indsat, samt et timestamp på hvornår billedet er kreeret.
+Yderligere kan et besked objekt indeholde feltet "reactions", som er de emoji reaktioner man kan lave på beskederne. Disse er beskrevet med både hvilken emoji der er reageret med, samt hvem der har reageret.
+
+Det eneste kritik punkt man kan have af denne velorganiserede fil, er at der ingen steder er noteret hvis man har replyet på en anden besked. Kimse kimse.
+
+Men nu har vi dataen, som strækker sig fra d. 19/09-2023 til d. 18/09-2023. Og så skal man til at behandle den, så man kan drage de konklusioner vi har ledt efter. Hertil har jeg brugt Python, som har et godt JSON library, som gjorde dette meget nemt. Step 1 er at filtrere de beskeder ud som indeholder et \coffee\ ping. Da dette er en emoji, er den UTF-8 enkodet, men den fil man får ud er i ASCII. Hertil er der brugt '\textbackslash u00XX' for enkodningen af UTF-8 karakterer, hvor 'XX' er hex enkodningen af den byte der ligger underliggende. Efter lidt søgning (og kvalificeret gæt, lad os være ærlige, der er mange pings, som har den samme enkodning jo), vides det at enkodning er:
+\begin{center}
+\textbackslash u00e2\textbackslash u0098\textbackslash u0095: \coffee
+\end{center}
+Dog skal det siges, at for beskeder, som kun er en emoji (og det er jo dem vi leder efter), så tilføjer Facebook yderligere '\textbackslash u00ef\textbackslash u00b8\textbackslash u008f' bag på beskeden. Umiddelbart lader det til at være en form for Byte Order Mask (BOM) enkodning, men ikke helt præcist. Facebook wack. Men, det betyder at der skal ledes efter beskeder hvor "content" er præcist "\textbackslash u00e2\textbackslash u0098\textbackslash u0095\textbackslash u00ef\textbackslash u00b8\textbackslash u008f". Og det er heldigvis nemt.
+
+Men nu sidder du nok og tænker "men hvorfor er det at timestampet er unix time, og ikke bare dato og klokkeslet?", jov det er simpelthen blot fordi: tid er wack. Der er 60 sekunder på et minut (for det meste, leap-seconds er en ting), der er 60 minutter på en time, så er der 24 timer på en dag (hvad, hvorfor skifter tallet!?), og derefter bliver det helt kaos, fordi hver måned har forskelligt antal dage, hvor februar er helt spicy med skudår. For ikke at tale om tidszoner og sommertid! I det hele taget gør det svært at finde ud af hvor lang tid der er mellem to tidspunkter. Indtil nogen fandt på den fantaske unix tid: antal sekunder siden 1. januar 1970 i England. Ja, det virker arbitrært, men det virker vildt godt. Pludseligt er alle tidspunkter unikke!
+
+Men øv, for vores data kan vi ikke nøjes med unix tid, for det giver en lidt kedelig analyse, ikke at vide eks hvad ugedagen er. Derfor skal vi lave det om til disse "let læselige" tidspunkter. Heldigvis findes der et indbygget python biblotek til dette, kaldet 'datetime'. Så kommer problem 1: jeg pleger totalt at ignorere sommertid, fordi det typisk ikke er et problem. Men, når man har tidsdata fra et helt år, så kan man ikke helt ignorere det, ellers er halvdelen af ens data en time off fra den anden. Heldigvis kan datetime tage højde for dette vha 'zoneinfo' modulet, hvis man sætter den til dansk konversion, da denne som default indeholder sommertid. Hvis man er i tvivl om dette virker (læs: jeg var i tvivl), kan man prøve at tage unix tiden som den er lige nu, smide ind i datetime, og se om den rammer rigtigt. Så kan man tage den unix tid, og ligge et antal hele dage i, i sekunder, indtil man kan se at man kommer om på den anden side af sommertiden, hvor man så kan se at time tallet kommer til at ændre sig. Og endda den rigtige vej.
+
+Så nu har vi dataen, den er pakket flot ind i en lille plastik boks, og vi er klar til at behandle den.
+
+
+\section*{Dataanalysen}
+
+Lad os få det største spørgsmål ud af verden: hvor mange \coffee\ pings er der så på et år? 2596. Det er i gennemsnit ca 7,1 \coffee\ pings om dagen, hver dag, hele året. Ja, \coffee\ ping chatten føles til tider lidt som spam. Dertil skal det tilføjes at der naturligvis sendes andet i chatten en \coffee\ pings, som kun yderligere tilføjer spam.
+
+Men lad os først få katten ud af sækken: måleusikkerheden. Den er der. Heldigvis er jeg ikke fysiker, så jeg behøver ikke at skrive præcist hvad den er. Den kommer dog af folk der kommer til en sjælden gang i mellem at dobbeltklikke. Dog værst ligger usikkerheden, med folk der går i kaffestuen, uden at ping. Det kan være at man bare går forbi nogens kontor, og inviterer dem med på et run, eller det kan være at man går i kaffestuen med sin gruppe, og pinger af den grund.
+
+Okay, med det ude af verdenen: hvornår går folk så i kaffestuen? Hertil har jeg lavet flere plots, som opsumerer antallet af pings fordelt på ugedage og månederne i løbet af året.
+Første plot sis på Figur~\ref{fig:0}, som indeholder en fordeling af pings, fordelt på ugedage. Ganske nartuligt er der færre pings i weekenden, end der er i hverdagene, hvor peak ligger omkring midten af ugen. Mandag er hård og kræver mere kaffe, men det kræver nu også at man dukker op. At fredag har færre pings end de andre hverdage skylder jeg personligt skylden på Fredagscaféen\footnote{I daglig tale kaldt DatBar.}, som åbner kl 15, og altså trækker en smule mere end kaffestuen gør.
+
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot0.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ pings fordelt på ugedag.}
+	\label{fig:0}
+\end{figure}
+
+Man kan tage et skridt mere ind i tid, og kigge på hvordan disse pings ligger fordelt over timerne i dagen, som ses på Figur~\ref{fig:1}. Hertil ses det, at der naturligvis er flest pings omkring frokost, som skyldes tre ting: På dette tidspunkt er alle dukket op på uni, det passer med frokostpausen, og det ligger før folk er stoppet med at drikke kaffe for dagen (ja, en dag bliver man gammel, og så skal man stoppe med at drikke kaffe, for at kunne sove om natten). Det ses også at de fleste dage også har en ping omkring kl 10, som tilsvarende passer med en morgen/første pause kaffe. Den allerhøjeste ping ligger om torsdagen efter frokost, omkring kl 13. Dette må da naturligvis skyldes, at mange af de som er med i \coffee\ ping chatten, også praktiserer det hellige 12:17\texttrademark, som naturligvis fejres hver torsdag. Den obmærksomme læser kan også se at der ligger en ikke irrelevant mængde af pings natten til lørdag, som nok også må skyldes den førnævnte Fredagscaféen.
+
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot1.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ pings fordelt på klokkeslet og ugedag.}
+	\label{fig:1}
+\end{figure}
+
+Så tænker du nok, men altså, det kan jo ikke passe at alle uger er ens? Der er vel også læseferier og sagnomspundne faktiske ferier? Jov! Og det påvirker naturligvis også dataen. Dog antages det at det ikke påvirker den førnævnte ugeanalyse groft. Tager man et kig på månederne, så må det antages at der er færre pings i de måneder, som er ferie måneder, mens der ikke er en stor forskel på semester og læseferie månederne. På Figur~\ref{fig:2} kan denne analyse ses, hvor det tydeligt ses, at de rene feriemåneder Juli og August hen over sommeren, har færre pings, end resten af året. Dog kan man ellers ikke konkludere meget andet på dette plot, andet end at April er underligt lav, og November underligt høj.
+
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot2.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ pings fordelt på måned.}
+	\label{fig:2}
+\end{figure}
+
+Tager man et skridt mere ind, og kigger på pings fordelt hen over hver dag i året, dukker der nogle flere konklusioner op. Denne kan ses på Figur~\ref{fig:3}. Hertil ses det at der er et hul i starten af April, som passer med påskeferien, sant i midt Oktober, som tilsvaren passer med efterårsferien. Det ses også tydeligt i semester månederne hvornår weekenden ligger. Dog kan er det sværre at se denne forskel på ugedagene i Januar og Juni, som er læseferie månederne. Lad os være ærlige: vi kan heller ikke selv kende forskel på ugedagene når først der er læseferie. Der er dog nogle enkelte dage med mange pings. Jeg har filtreret de dage ud, som har 20 eller flere \coffee\ pings, som kan ses i den nedenstående tabel.
+\begin{center}
+	\begin{tabular}{l|c}
+		Dato & \coffee\ pings \\ \hline
+		\phantom{3}2 Maj & 24 \\
+		\phantom{3}7 Juni & 22 \\
+		\phantom{3}6 Oktober & 20 \\
+		31 Oktober & 23 \\
+		\phantom{3}1 December & 23 \\
+		\phantom{3}5 December & 21
+	\end{tabular}
+\end{center}
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot3.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ pings fordelt på årets dag og måned.}
+	\label{fig:3}
+\end{figure}
+
+\noindent
+Jeg har kigget lidt i kalenderen, og skal jeg være ærlig. Jeg har ingen anelse om hvorfor præcis det er disse datoer der er mange \coffee\ pings på.
+
+Så nu har vi nogenlunde styr på hvornår folket går i kaffestuen. Men hvor mange går afsted? Denne analyse er en smule sværre. Den tætteste approximering, er at hvis to \coffee\ pings ligger $\Delta t$ fra hinanden, så er de taget afsted sammen. Hvis der så yderligere er max $\Delta t$ til det næste \coffee\ ping, så har alle tre været afsted sammen, og så videre. Hertil skal man så have fundet et tilpads $\Delta t$. Denne har jeg fundet ved at tænke i nødagtigt 30 sekunder. Herefter plottede jeg dataen, opdagede den var for lav, rettede den til to gange, og er til sidst end med at bestemme,
+\[ \Delta t = 5 \; \text{min}. \]
+
+\noindent
+Med dette $\Delta t$ er gruppefordelingen som ses på Figur~\ref{fig:4}. Den ser nu lidt sørgelig ud, det ligner at folk går meget alene i kaffestuen. Det gør man måske også. Dog skal der pointeres, at nogle også sender pings, selvom de tager i kaffestuen med andre folk, end folk fra \coffee\ ping chatten, dvs, at de går ikke alene i kaffestuen, selvom dataen viser det. Derfra siger dataen at mange tager to og to i kaffestuen, hvor der enkelte gange er flere med. Fra min personlige erfarring, så er det tilfældet at man tit er ca 3 folk afsted. Derfor kan man kun fra dette plot konkludere, at det ikke er særligt godt.
+
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot4.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ ture fordelt over gruppestørrelse.}
+	\label{fig:4}
+\end{figure}
+
+Men! Sidst, men ikke mindst, hvem tager i kaffestuen? For det kan vel ikke være alle i chatten, som pinger lige meget? Og nej, det er helt korrekt tænkt. Tager man \coffee\ pings, og tæller for hver person hvor mange gange de pinger, og plotter det fra mindste til størst, fåes det plot, som ses på Figur~\ref{fig:5}. Her ses det tydeligt, at det er nogle enkelte personer, som står for langt de fleste pings. I mange situationer er der en 80/20 fordeling, som her ville sige, at 20\% af gruppen står for 80\% procent af ping'sne. Dette gælder dog ikke her, da man skal summe de øverste 8 ud af de 15 i gruppen, for at komme over de 80\% af pings.
+
+\begin{figure}
+	\centering
+	\resizebox{\textwidth}{!}{\input{plot5.pgf}}
+	\vspace{-25pt}
+	\caption{\protect\coffee\ pings per person, sorteret fra mindst til størst.}
+	\label{fig:5}
+\end{figure}
+
+
+\section*{Konklusion}
+
+Men hvad kan man så konkludere ovenpå alt det her? Har jeg for meget fritid? Var dette blot et eksperiment, som ikke burde se dagens lys? Eller går vi faktisk for meget i kaffestuen?
+Jeg kan ikke selv svare på det, men det håber jeg da at du kære læser selv kan. For ellers virker det lidt som spild af tid at have læst.
+Det sagt; skal vi gå i kaffestuen? \coffee\
+
+
+
+%\end{article}
+%\begin{flushright}
+% Forfatterens navn skrives her.
+%Casper Rysgaard
+%\end{flushright}
+
+\end{document}
+
