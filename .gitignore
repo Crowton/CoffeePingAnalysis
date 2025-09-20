@@ -1,0 +1,11 @@
+# Ignore the raw data for privacy reasons
+**/*.json
+
+# Ignore build files, such as plots and LaTeX out files
+**/*.pgf
+**/*.aux
+**/*.fbd_latexmk
+**/*.fls
+**/*.log
+
+**/*.pdf
