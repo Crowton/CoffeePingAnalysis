@@ -9,7 +9,7 @@ This is then printed in the danish student magazine "Mads Føk".
 
 
 ## First article
-Available at: https://www.madsfoek.dk/udgivelser/51-1.pdf
+Available at: https://www.madsfoek.dk/udgivelser/51-1.pdf#page=12
 
 This article covers the first year of pings from 2022-2023.
 The frequency analysis is based on weekdays, months, as well as hours within a week and all days of the year.
@@ -17,7 +17,7 @@ The group analysis defines that pings within 5 minutes is in the same group, and
 
 
 ## Second article
-Available at: https://www.madsfoek.dk/udgivelser/52-1.pdf
+Available at: https://www.madsfoek.dk/udgivelser/52-1.pdf#page=10
 
 This article covers the second year of pings from 2023-2024.
 The frequency analysis is similar to the first article.
@@ -26,7 +26,7 @@ It is shown that the additional bytes are a variation selector, and using this i
 
 
 ## Third article
-Available at: https://www.madsfoek.dk/udgivelser/52-2.pdf
+Available at: https://www.madsfoek.dk/udgivelser/52-2.pdf#page=10
 
 This article covers the collected pings over the years 2022-2024, as well as analyzing the difference between the two periodes.
 This includes comparing the expected number of pings per day to a normal distribution and a cummulative plot of pings over the years, to locate when major downfalls in the number of pings is present.
