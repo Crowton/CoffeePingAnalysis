@@ -1,0 +1,1 @@
+$ENV{'TEXINPUTS'}='./genbrug//:' . $ENV{'TEXINPUTS'}; 

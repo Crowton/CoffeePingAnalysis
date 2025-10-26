@@ -1,0 +1,12 @@
+\ProvidesPackage{fame}[2002/03/09 Foek package for includeing the male
+and female symbols as MetaPost generated postscript files]
+\DeclareOption{pdftex}{\PackageWarning{fame}{Might not work well with pdftex}}
+\ProcessOptions
+\RequirePackage{graphicx}
+\newcommand{\male}[1][1ex]{%
+\includegraphics[clip=false,height=#1,bb=0 .5 14 12]%
+{/users/madsfoek/tex/Macros/fame/male.mps}}
+\newcommand{\female}[1][1ex]{%
+\includegraphics[clip=false,height=#1,bb=0 .5 11.5 12]%
+{/users/madsfoek/tex/Macros/fame/female.mps}}
+\endinput

@@ -1,0 +1,43 @@
+% Sadly, I don't have a copy of the nice TKET package. Instead, here are some
+% hacky replacements for the common macros.
+
+\newlength\@rbll
+\def\rbl#1#2{%
+  \settowidth{\@rbll}{\hbox{#2}}%
+  #2\kern-#1\@rbll#2}
+\newcommand\@TK{\mbox{\ttfamily
+    \raisebox{-0.4pt}{T}%
+    \rbl{.95}{\AA}G%
+    \rotatebox{-8}{E}%
+    \raisebox{-0.6pt}{K}%
+    $\,\!$%
+    \raisebox{0.2pt}{\rbl{.94}{A}}%
+    $\,\!$%
+    \raisebox{-0.6pt}{M}%
+    \rotatebox{8}{\rbl{.94}{M}}%
+    ER\hspace{1pt}}}%
+\newcommand\@TKET{\mbox{\@TK%
+\kern-2pt\rotatebox{-8}{\ttfamily E}%
+\kern-1pt\raisebox{-.4pt}{\ttfamily T}\kern1pt%
+}}
+\newcommand\@TKETS{\mbox{\@TKET\kern-2pt\raisebox{-0.2pt}{\ttfamily S}}}
+
+% This never happens.
+\newcommand\@TKD{\mbox{\ttfamily
+    \raisebox{-0.4pt}{T}%
+    \rbl{.95}{\AA}G%
+    \rotatebox{-8}{E}%
+    \raisebox{-0.6pt}{K}%
+    $\,\!$%
+    \raisebox{0.2pt}{\rbl{.94}{A}}%
+    $\,\!$%
+    \raisebox{-0.6pt}{M}-}%
+  \linebreak%
+  \mbox{\ttfamily\relax%
+  \rotatebox{8}{\rbl{.94}{M}}%
+  ER\hspace{1pt}}}%
+
+\newcommand\TK{\@TK\xspace}
+\newcommand\TKET{\@TKET\xspace}
+\newcommand\TKETS{\@TKETS\xspace}
+\newcommand\TKD{\@TKD\xspace}
