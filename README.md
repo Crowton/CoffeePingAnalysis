@@ -31,3 +31,11 @@ Available at: https://www.madsfoek.dk/udgivelser/52-2.pdf#page=10
 This article covers the collected pings over the years 2022-2024, as well as analyzing the difference between the two periodes.
 This includes comparing the expected number of pings per day to a normal distribution and a cummulative plot of pings over the years, to locate when major downfalls in the number of pings is present.
 This article also looks deeper at a group analysis, and establishes the relationsship between each pair of (anomymized) person of the chat, with reguards to common coffee groups.
+
+
+## Fourth article
+Available at: https://www.madsfoek.dk/udgivelser/53-1.pdf#page=20
+
+This article covers the collected pings over all three years from 2022-2025, including a short discussion of the differences and similarities of the years.
+A new analysis on the groups is performed, where first it is noted that counting groups of different sizes directly is skewing the data. This skewness arrises from twice as many people being needed for a two person group over a single person group. The analysis is therefore altered to focuses on the number of people in total of the different group sizes. This is then used to show how the group sizes are distributed over the hours of a day.
+Further, a social credit system and later elo ranking is calculated for each member of the chat, to try and quantify how much each person is pulling other people along to the coffee lounge. The basis for these calculations i the ordered ping of each group.
