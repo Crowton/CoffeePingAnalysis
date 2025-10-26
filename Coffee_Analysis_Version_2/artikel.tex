@@ -19,10 +19,6 @@
 \newcommand{\grapes}[0]{\inlinegraphics{grapes.png}}
 \newcommand{\textcoffee}[0]{\inlinegraphics{text_coffee.png}}
 
-\usepackage{csquotes}
-\DeclareQuoteAlias{english}{danish}
-\MakeOuterQuote{"}
-
 \renewcommand{\figurename}{Figur.}
 
 \usepackage{tabularx}
@@ -38,22 +34,22 @@
 
 \maketitle
 
-Sidste år fulgte jeg det ældgamle udtryk: "Hvis man har en større mængde data, så skal man skrive en Mads Føk artikel". Nu er der gået et år mere, og derfor er der kommet mere data, som jeg naturligvis vil samle op på.
+Sidste år fulgte jeg det ældgamle udtryk: ``Hvis man har en større mængde data, så skal man skrive en Mads Føk artikel''. Nu er der gået et år mere, og derfor er der kommet mere data, som jeg naturligvis vil samle op på.
 
-Denne artikel bygger ovenpå artiklen "Kaffepausen: en Analyse" fra Mads Føk nr 1 årgang 51. Hvis du kære læser ikke har læst denne endnu vil jeg anbefale at gå ind på "https://www.madsfoek.dk/udgivelser" og finde den, det er et ganske godt stykke læsestof. Her kan man endda finde andre gamle udgivelser, og måske de gemmer på et sjovt hetz eller en god artikel, som er værd at tjekke ud.
+Denne artikel bygger ovenpå artiklen ``Kaffepausen: en Analyse'' fra Mads Føk nr 1 årgang 51. Hvis du kære læser ikke har læst denne endnu vil jeg anbefale at gå ind på ``https://www.madsfoek.dk/udgivelser'' og finde den, det er et ganske godt stykke læsestof. Her kan man endda finde andre gamle udgivelser, og måske de gemmer på et sjovt hetz eller en god artikel, som er værd at tjekke ud.
 Selvom denne artikel bygger en smule ovenpå en gammel artikel, skal jeg selvfølgelig nok gøre denne læselig uden at den gamle artikel er en forudsætning, i ægte forsker stil!
 Derfor kommer her en introduktion:
 
 På datalogi befinder der sig et magisk rum, hvor de ansatte har muligheden for at hente den skønneste livseliksir: kaffen. Af de to legendariske maskiner løber et overflødighedshorn af kaffe, cappucino, latte machiato, kakao, og andre skønne drikkevarer.
 
-Dengang jeg var yngre, og blot instruktor, sad vi tit i Regnecentralen og arbejdede, og ventede på den næste gang nogen sagde de smukke ord: "Skal vi ikke lige tage et coffee run?". Og så kunne man få sig en velfortjent pause, mens man traskede afsted, snakkede og fik noget mere dejlig kaffe. Men ak! Den tid kunne ikke blive ved. Man blev mere ansat, fik kontor, og pludseligt var de daglige coffee runs forsvundet, da alle man plejede at gå afsted med, også sad på hver deres kontor rundt omkring. Man gik da stadig i kaffestuen -- jeg er jo ikke psykopat -- men at tage derned alene havde ikke den samme charme. Man fik ikke sludret! Det var en mørk tid.
+Dengang jeg var yngre, og blot instruktor, sad vi tit i Regnecentralen og arbejdede, og ventede på den næste gang nogen sagde de smukke ord: ``Skal vi ikke lige tage et coffee run?''. Og så kunne man få sig en velfortjent pause, mens man traskede afsted, snakkede og fik noget mere dejlig kaffe. Men ak! Den tid kunne ikke blive ved. Man blev mere ansat, fik kontor, og pludseligt var de daglige coffee runs forsvundet, da alle man plejede at gå afsted med, også sad på hver deres kontor rundt omkring. Man gik da stadig i kaffestuen -- jeg er jo ikke psykopat -- men at tage derned alene havde ikke den samme charme. Man fik ikke sludret! Det var en mørk tid.
 
 Men ud af mørket fødes lyset: '\coffee\ ping' chatten.
 En chat, hvor man kan sende en \coffee\ emoji, og gennem dette batsignal, fortælle at det er tid til et coffee run. Alle, der gerne ville med, kan så sende en \coffee\ som respons, og på den måde ved man hvem man skal vente på, så man kan nå at møde alle, som skulle med på coffee runnet. Et skønt koncept, der fjernede mørket, og kun lod den mørke kaffe blive tilbage.
 
 Men efter en rum tid, så bliver det jo til nogle pings. Og med mange pings kommer der meget data, som man kan analysere på. For hvornår går folk i kaffestuen? Hvor mange er man afsted af gangen?
 
-Citation på introduktionen: Mads Føk nr. 1 årgang 51 artikel "Kaffepausen: en Analyse".
+Citation på introduktionen: Mads Føk nr. 1 årgang 51 artikel ``Kaffepausen: en Analyse''.
 Du troede nok jeg ville hoppe i plagietfælden hva? Nej nej, der er skam kildehenvisning på!
 
 
@@ -69,9 +65,9 @@ Næ nej, det ville jo være smart! I stedet for at lave denne vertikale deling a
 Her kan man også konkludere, at Facebook gerne vil være sikker på at ens ting kommer med, for der er duplikater af billeder i forskellige mapper. Og mange af dem! Tsk tsk.
 Men heldigvis er det kun hele filer, der er delt, og ikke de JSON filer som indeholder ens chats. Så dataen, vi er interesseret i, skal vi ikke til at flette sammen. Heldigt.
 
-I denne JSON fil er noget metadata for chatten samt en lang liste "messages", som indeholder alle beskederne i chatten. Hver af disse indeholder "sender\_name" (navnet på hvem der har sendt beskeden) og "timestamp\_ms" (unix time i millisekunder). Sidst blev det diskuteret, hvorfor unix time er absolut overlegen over almindeligt datoformat, og denne holdning holder jeg fast i, givet den er 100\% sand.
+I denne JSON fil er noget metadata for chatten samt en lang liste ``messages'', som indeholder alle beskederne i chatten. Hver af disse indeholder ``sender\_name'' (navnet på hvem der har sendt beskeden) og ``timestamp\_ms'' (unix time i millisekunder). Sidst blev det diskuteret, hvorfor unix time er absolut overlegen over almindeligt datoformat, og denne holdning holder jeg fast i, givet den er 100\% sand.
 Og bare rolig, bare fordi almindeligt datoformat er skrald for computere, har jeg naturligvis stadig taget højde for sommer- og vintertid i oversættelsen til det almindelige datoformat. Eller, det har det indbyggede \texttt{datetime} biblotek i Python taget højde for.
-Tekstbeskeder indeholder yderligere "content", som er indeholdet af, hvad der er blevet sendt. Det er her, kære læser, at vores kaffe pings gemmer sig. Ja, man skulle jo nok tro, at alt der var i \coffee\ ping chatten, er \coffee\ pings, men her tager man fejl, da det også indeholder en utrolig masse spam. Vi skal derfor filtrere i beskederne, for at få fat i de faktiske \coffee\ pings.
+Tekstbeskeder indeholder yderligere ``content'', som er indeholdet af, hvad der er blevet sendt. Det er her, kære læser, at vores kaffe pings gemmer sig. Ja, man skulle jo nok tro, at alt der var i \coffee\ ping chatten, er \coffee\ pings, men her tager man fejl, da det også indeholder en utrolig masse spam. Vi skal derfor filtrere i beskederne, for at få fat i de faktiske \coffee\ pings.
 
 Emojis er enkodet i UTF-8, som er et format der understøtter (næsten) alle tegn i verden, herunder også emojis. I JSON filen er UTF-8 karakterer enkodet med '\textbackslash u00YY', hvor 'YY' er hex enkodningen af den byte der ligger underliggende. Her kan man kimse lidt af Facebook, da man kun bruger de nederste to værdier, og derved kunne enkode det samme med '\textbackslash xYY'.
 Dog kan vi nu fint genkende UTF-8 karakterer. Her sætter man flere af disse sammen i træk, da UTF-8 er variablet enkodet, for at lave en emoji. Her ved vi, at den enkodning vi leder efter, er
